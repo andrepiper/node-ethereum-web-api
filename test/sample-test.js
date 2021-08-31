@@ -1,19 +1,21 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+describe("Customer", function() {
+  it("Should create a new KYC record", async function() {
+    const customerFactory = await ethers.getContractFactory("Customer")
+    const customerSmartContract = await customerFactory.deploy()
+    await customerSmartContract.deployed()
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+    const customerAddress = customerSmartContract.address
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    const customerRecordFactory = await ethers.getContractFactory("CustomerRecord")
+    const customerRecordSmartContract= await customerRecordFactory.deploy(customerAddress)
+    await customerRecordSmartContract.deployed()
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    const customerRecordAddress = customerRecordSmartContract.address
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
+    await customerRecordSmartContract.createToken("https://www.mytokenlocation.com")
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
-  });
-});
+    customer = await customerSmartContract.getCustomerDetails(customerRecordSmartContract);
+
+    console.log('items: ', items)
+  })
+})
